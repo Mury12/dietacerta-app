@@ -1,8 +1,8 @@
 <template>
-  <b-row class="mt-5 w-100 nothing-wrap align-items-center">
+  <b-row class="mt-5 nothing-wrap align-items-center">
     <b-col cols="12" class="mt-5">
       <h4 class="nothing-text">{{title}}</h4>
-      <div class="nothing-logo" v-if="!logo">
+      <div class="nothing-logo d-flex flex-column justify-content-center align-items-center" v-if="!logo">
         <p
           class="nothing-thoughs default-transition"
           :class="{'switching' : switching}"
@@ -108,19 +108,12 @@ export default {
   height: 1px;
   width: 1px;
   transform: scale(100);
-  top: 63.1%;
-  left: 50.8%;
   opacity: 1;
   z-index: 0;
   animation: pulse 5s infinite;
+  top: 90px;
 }
 
-@media screen and (max-width: 576px){
-  .nothing-logo::before{
-    top: 69.8%;
-    left: 50%
-  }  
-}
 
 @keyframes pulse {
   0% {

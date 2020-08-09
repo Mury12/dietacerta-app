@@ -45,7 +45,7 @@ export default {
   data() {
     return {
       navbar: NavItems,
-      navbarIsOpen: true,
+      navbarIsOpen: false,
       hide: false,
     };
   },
@@ -94,6 +94,7 @@ export default {
 
 <style>
 @import url("https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,200;0,300;0,400;0,700;1,200;1,400&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Lobster:ital,wght@0,200;0,300;0,400;0,700;1,200;1,400&display=swap");
 #app {
   font-family: "Mulish";
   -webkit-font-smoothing: antialiased;
@@ -102,7 +103,8 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 0;
-  background-color: rgba(222, 231, 255, 0.2);
+  background-color: var(--def-brand-lightest);
+  overflow-x: hidden;
 }
 #app.hide {
   transition: ease-in-out 200ms;
@@ -114,6 +116,9 @@ export default {
 }
 input::placeholder {
   color: rgba(189, 69, 202, 0.3) !important;
+}
+.f-lobster {
+  font-family: Lobster;
 }
 @media screen and (min-width: 761.99px) {
   .navbar-is-open {
@@ -205,13 +210,14 @@ input::placeholder {
   position: absolute;
 }
 :root {
-  --def-brand-light: #3589bd;
-  --def-brand-lighter: #40a4e3;
-  --def-brand: #3b9bd5;
-  --def-brand-dark: #2a6d96;
-  --def-brand-darkmid: #14435f;
-  --def-brand-darker: #183f57;
-  --def-darker-alpha: #183f5752;
+  --def-brand-lightest: #F9EDFF;
+  --def-brand-lighter: #B7B1FC;
+  --def-brand-light: #8984BD;
+  --def-brand: #7871BD;
+  --def-brand-dark: #5B577D;
+  --def-brand-darkmid: #514E70;
+  --def-brand-darker: #3F3D57;
+  --def-darker-alpha: #3F3D5752;
   --def-lightblue: #6b579b;
   --def-lightblue-alpha: #d0e9ff61;
   --def-lightgray: #e7e7e7;

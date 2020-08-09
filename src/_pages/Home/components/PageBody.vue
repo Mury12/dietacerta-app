@@ -89,6 +89,9 @@ export default {
       this.row_limit = this.history.length >= 10 ? this.history.length : 10;
       this.restartSocket();
     });
+    setTimeout(()=>{
+      this.onRequest=false;
+    }, 10000)
   },
   beforeDestroy() {
     if (this.socket) {

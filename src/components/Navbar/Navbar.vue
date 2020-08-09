@@ -7,11 +7,12 @@
     <b-row class="justify-content-center mt-0">
       <b-col cols="12" class="logo">
         <!-- <div class="user-image" :style="{backgroundImage: `url(${$getMedia(user_data.pic)})`}"></div> -->
-        <transition mode="out-in" name="slide">
-          <img class="nav-brand-logo"
-            src="../../assets/logo.png"
-          />
-          <!-- <img src="../../assets/logobot.png" width=100% v-else /> -->
+        <transition mode="out-in" name="fade">
+          <div v-if="navbar.isOpen">
+            <img class="brand-logo-behind" key="brand-logo" src="../../assets/logo.png" />
+            <h2 class="f-lobster text-white mt-1" key="brand-name">Dieta Certa</h2>
+          </div>
+            <img class="nav-brand-logo" key="brand-logo" src="../../assets/logo.png" />
         </transition>
       </b-col>
     </b-row>
@@ -36,7 +37,7 @@
     </div>
     <div id="sidebar-logout" class="text-white default-transition">
       <b-row class="justify-content-left text-left pl-3 py-2" @click="logout">
-        <b-col cols="1"  >
+        <b-col cols="1">
           <fas icon="power-off" />
         </b-col>
         <b-col cols="10" v-show="navbar.isOpen">Sair</b-col>
@@ -56,7 +57,7 @@ export default {
         pic: "users/nopic.png",
       },
       navbar: {
-        isOpen: true,
+        isOpen: false,
       },
     };
   },
@@ -94,19 +95,33 @@ export default {
   background-color: rgb(252, 186, 64);
   box-shadow: -1em 0.5em 0.3em rgba(0, 0, 0, 0.125);
 }
-.nav-brand-logo{
+.logo {
+  height: 80px;
+  word-wrap: none;
+  word-break: keep-all;
+}
+.brand-logo-behind {
+  position: absolute;
+  right: 28%;
+  top: -20px;
+  opacity: 0.3;
+  z-index: 0;
+  width: 100px;
+}
+.nav-brand-logo {
   border-radius: 0 0 30% 30%;
   transition: ease-in-out 200ms;
   transition-delay: 400ms;
-  max-width: 100px;
+  width: 62px
+  
 }
-.navbar-closed .nav-brand-logo{
-  margin-top: -15px;
-  margin-left: -5px;
-  padding: 25px 0 ;
+.navbar-closed .nav-brand-logo {
+  margin-top: -30px;
+  margin-left: -23px;
+  padding: 25px 0;
   border-radius: 0 0 30% 30%;
   box-shadow: none !important;
-  max-width: 30px;
+  max-width: 62px;
 }
 #sidebar-logout {
   position: absolute;
@@ -145,11 +160,11 @@ export default {
   background-color: var(--def-brand-darker);
   left: -12px;
   border-right: 10px solid var(--def-brand-dark);
-  border-radius: 0 50% 50% 0
+  border-radius: 0 50% 50% 0;
 }
-.nav-link{
+.nav-link {
   transition: ease-in-out 200ms;
-  left: 0
+  left: 0;
 }
 .nav-item .nav-link:hover {
   left: 2px;

@@ -1,6 +1,6 @@
 <template>
   <b-row id="page-header" class="m-0 w-100">
-    <page-title :title="$route.name" />
+    <page-title class="f-lobster" :title="$route.name" />
     <div class="user-info px-3">
       <b-row class="h-100 align-items-center">
         <b-col cols="12">
@@ -58,16 +58,16 @@ export default {
 #page-header {
   position: relative;
   height: 85px;
-  background-color: var(--def-brand-darkmid);
+  background-color: var(--def-brand-darker);
   color: white;
-  box-shadow: 0 0.2em 0.1em rgba(0, 0, 0, 0.225);
+  box-shadow: 0 0.2em 0.1em rgba(0, 0, 0, 0.125);
 }
 .user-info {
   position: absolute;
   right: 40px;
   height: 100%;
   transition: ease-in-out 200ms;
-  background-color: rgba(136, 207, 252, 0.4);
+  background-color: var(--def-brand-light)
 }
 .user-info:hover {
   cursor: default;
