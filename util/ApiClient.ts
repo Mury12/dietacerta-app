@@ -28,7 +28,7 @@ const routes = {
 class ApiClient {
   constructor(
     private readonly cli = axios.create({
-      baseURL: "http://192.168.123.101:8081/ws/v2",
+      baseURL: "http://192.168.123.101:7000/ws/v2",
       withCredentials: false,
     })
   ) {}

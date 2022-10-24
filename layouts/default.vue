@@ -1,9 +1,9 @@
 <template>
   <div class="__page-root">
     <BRow class="page-wrapper">
-      <BCol cols="12" lg="2" class="border border-primary nav-bar">
+      <!-- <BCol cols="12" lg="2" class="border border-primary nav-bar">
         <TheNavbar />
-      </BCol>
+      </BCol> -->
 
       <BCol class="px-0">
         <TheHeader class="default-layout-header" />

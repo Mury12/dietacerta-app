@@ -275,7 +275,9 @@ onMounted(() => {
     fetchFoods();
   });
 });
+
 </script>
+
 <style scoped>
 .food {
   border-bottom: 1px dashed var(--bs-border-color);

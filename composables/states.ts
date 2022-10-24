@@ -9,6 +9,8 @@ import {
 
 import { dietMock } from "~~/util/diet.mock";
 import { userMock } from "~~/util/user.mock";
+import { foodsMock } from "~~/util/foods.mock";
+import { mealsMock } from "~~/util/meals.mock";
 
 export const useCounter = () => useState<number>("counter", () => 0);
 
@@ -19,10 +21,10 @@ export const useComputedDiet = () =>
   useState("diet", (): GetDietResponse => dietMock);
 
 export const useComputedFoods = () =>
-  useState("foods", (): GetFoodsResponse => []);
+  useState("foods", (): GetFoodsResponse => foodsMock);
 
 export const useComputedMeals = () =>
-  useState("meals", (): GetMealsResponse => []);
+  useState("meals", (): GetMealsResponse => mealsMock);
 
 export const useComputedUser = () => useState("user", (): User => userMock);
 

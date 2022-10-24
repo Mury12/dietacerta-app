@@ -1,0 +1,12 @@
+FROM node:16.15.1
+
+WORKDIR /app
+
+COPY . .
+RUN npm install -g nodemon ts-node typescript
+RUN yarn
+
+EXPOSE 8001
+
+ENV NUXT_HOST=0.0.0.0
+ENV NUXT_PORT=8001
