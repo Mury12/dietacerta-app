@@ -4,6 +4,7 @@
     "build": "nuxt build",
     "dev": "PORT=8080 nuxt dev",
     "docker": "PORT=8001 nuxt dev",
+    "start": "PORT=8001 nuxt start",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare"

@@ -56,7 +56,7 @@ const meals = useComputedMeals();
 
 function setSelected(idx: number) {
   toggle();
-  this.selected = idx;
+  selected.value = idx;
 }
 
 async function login(

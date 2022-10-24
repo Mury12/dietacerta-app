@@ -5,6 +5,7 @@ WORKDIR /app
 COPY . .
 RUN npm install -g nodemon ts-node typescript
 RUN yarn
+RUN yarn build
 
 EXPOSE 8001
 
