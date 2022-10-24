@@ -6,74 +6,48 @@
         <BFormSelect v-model="strategy">
           <option value="calories">Calorias</option>
           <option value="weight">Por peso</option>
-          <option value="free">Manual</option> </BFormSelect
-        ><br />
+          <option value="free">Manual</option>
+        </BFormSelect><br />
 
         <BRow>
           <BCol cols="12" v-if="strategy === 'weight'">
             <label>Estratégia</label> <br />
-            <BFormRadioGroup v-model="goal">
-              <BFormRadio :value="StrategyMult.gain" checked
-                >Leve (-déficit)</BFormRadio
-              >
-              <BFormRadio :value="StrategyMult.keep">Normal</BFormRadio>
-              <BFormRadio :value="StrategyMult.loss"
-                >Agressiva (+déficit)</BFormRadio
-              >
-            </BFormRadioGroup>
+            <div class="d-flex gap-lg flex-wrap py-3">
+              <label class="pointer">
+                <input type="radio" v-model="goal" :value="StrategyMult.gain" class="mr-2" /> Leve (-déficit)
+              </label>
+              <label class="pointer">
+                <input type="radio" v-model="goal" :value="StrategyMult.keep" class="mr-2" /> Normal
+              </label>
+              <label class="pointer">
+                <input type="radio" v-model="goal" :value="StrategyMult.loss" class="mr-2" /> Agressiva (+déficit)
+              </label>
+            </div>
+
           </BCol>
-          <BCol cols="12" md="6"
-            ><label for="daily-weight">Peso Inicial</label>
-            <BFormInput
-              type="text"
-              name="weight"
-              v-model="weight"
-              v-mask="decimalMask"
-          /></BCol>
-          <BCol cols="12" md="6"
-            ><label for="daily-weight">Peso Meta</label>
-            <BFormInput
-              type="text"
-              name="weight"
-              v-model="goalWeight"
-              v-mask="decimalMask"
-          /></BCol>
-          <BCol cols="12" md="6"
-            ><label for="daily-kcal">Calorias ao dia</label>
-            <BFormInput
-              type="text"
-              name="kcal"
-              v-mask="['######']"
-              v-model="kcal"
-              :readonly="/free|weight/gi.test(strategy)"
-          /></BCol>
-          <BCol cols="12" md="6"
-            ><label for="daily-carb">Carboidratos</label>
-            <BFormInput
-              type="text"
-              name="carb"
-              v-mask="['###']"
-              v-model="carb"
-              :readonly="/calories|weight/gi.test(strategy)"
-          /></BCol>
-          <BCol cols="12" md="6"
-            ><label for="daily-prot">Proteinas</label>
-            <BFormInput
-              type="text"
-              name="prot"
-              v-mask="['###']"
-              v-model="prot"
-              :readonly="/calories|weight/gi.test(strategy)"
-          /></BCol>
+          <BCol cols="12" md="6"><label for="daily-weight">Peso Inicial</label>
+            <BFormInput type="text" name="weight" v-model="weight" v-mask="decimalMask" />
+          </BCol>
+          <BCol cols="12" md="6"><label for="daily-weight">Peso Meta</label>
+            <BFormInput type="text" name="weight" v-model="goalWeight" v-mask="decimalMask" />
+          </BCol>
+          <BCol cols="12" md="6"><label for="daily-kcal">Calorias ao dia</label>
+            <BFormInput type="text" name="kcal" v-mask="['######']" v-model="kcal"
+              :readonly="/free|weight/gi.test(strategy)" />
+          </BCol>
+          <BCol cols="12" md="6"><label for="daily-carb">Carboidratos</label>
+            <BFormInput type="text" name="carb" v-mask="['###']" v-model="carb"
+              :readonly="/calories|weight/gi.test(strategy)" />
+          </BCol>
+          <BCol cols="12" md="6"><label for="daily-prot">Proteinas</label>
+            <BFormInput type="text" name="prot" v-mask="['###']" v-model="prot"
+              :readonly="/calories|weight/gi.test(strategy)" />
+          </BCol>
           <BCol cols="12" md="6">
             <label for="daily-tfat">Gorduras</label>
-            <BFormInput
-              type="text"
-              name="tfat"
-              v-mask="['###']"
-              v-model="tfat"
-              :readonly="/calories|weight/gi.test(strategy)"
-          /></BCol>
+            <BFormInput type="text" name="tfat" v-mask="['###']" v-model="tfat"
+              :readonly="/calories|weight/gi.test(strategy)" />
+          </BCol>
         </BRow>
         <div class="text-end w-100">
           <BButton type="submit" class="mt-3">Salvar</BButton>
@@ -118,9 +92,7 @@
         </table>
         <p>
           Referências:
-          <a
-            href="https://www.healthline.com/nutrition/best-macronutrient-ratio#bottom-line"
-          >
+          <a href="https://www.healthline.com/nutrition/best-macronutrient-ratio#bottom-line">
             Healthline
           </a>
         </p>
