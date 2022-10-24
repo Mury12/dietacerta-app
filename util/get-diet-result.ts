@@ -10,7 +10,7 @@ export function getDietAfterMeal(
     carb: diet.carb - totalMacros.carb,
     prot: diet.prot - totalMacros.prot,
     tfat: diet.tfat - totalMacros.tfat,
-    fiber: diet.sodium - totalMacros.sodium,
-    sodium: diet.fiber - totalMacros.fiber,
+    sodium: diet.sodium - totalMacros.sodium,
+    fiber: diet.fiber - totalMacros.fiber,
   });
 }
