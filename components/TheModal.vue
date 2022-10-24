@@ -3,7 +3,7 @@
     <div class="d-flex justify-content-center px-5 --container">
       <BRow class="justify-content-center w-100">
         <div class="backdrop" @click="emit('close')" />
-        <BCol cols="12" xl="6" class="pb-3">
+        <BCol cols="12" xl="9" class="pb-3">
           <BRow
             class="
               modal-wrapper
