@@ -33,6 +33,9 @@ import { apiClient } from '~~/util/ApiClient';
 
 const router = useRouter();
 const user = useComputedUser();
+const LocalStorage = useLocalStorage();
+
+const isLoading = useGlobalLoader();
 
 const errorMsg = ref('');
 const isSignup = ref(false);
@@ -49,17 +52,22 @@ const signupForm = ref<User>({
 })
 
 async function send() {
+    isLoading.value = true;
     try {
         errorMsg.value = '';
-        const { name } = await apiClient.authenticate(authForm.value);
+        const { name, jwt } = await apiClient.authenticate(authForm.value);
         user.value = {
             name,
             email: authForm.value.email
         }
+        LocalStorage.set('user', user.value);
+        LocalStorage.set('jwt', jwt);
 
         router.push('/');
     } catch (error) {
         errorMsg.value = error.message;
+    } finally {
+        isLoading.value = false;
     }
 }
 
@@ -73,7 +81,7 @@ async function signup() {
         }
         await apiClient.createUser(data);
         send();
-        
+
     } catch (error) {
         errorMsg.value = error.message;
         console.error(error)

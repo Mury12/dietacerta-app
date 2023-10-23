@@ -1,4 +1,4 @@
-export class DynamicSelectorField<T> {
+export interface DynamicSelectorField<T> {
   label: keyof T;
   value: keyof T;
   showInfo?: {

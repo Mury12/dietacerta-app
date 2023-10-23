@@ -124,6 +124,9 @@ const goalWeight = ref<string>("0");
 const macroMult = useMacroDistribution().value;
 const goal = ref<StrategyMult>(StrategyMult.loss);
 
+const isLoading = useGlobalLoader();
+const loadingText = useLoadingText();
+
 const totalKcal = computed(() => {
   if (strategy.value === "calories") return kcal.value;
   if (strategy.value === "free")
@@ -172,12 +175,15 @@ watch([goalWeight, goal], () => {
 });
 
 async function send() {
+  isLoading.value = true;
+  loadingText.value = 'Criando dieta';
   const result = await apiClient.createDiet({
     weight: weight.value,
     carb: carb.value,
     prot: prot.value,
     tfat: tfat.value,
   });
+  isLoading.value = false;
   console.debug("create diet", result);
 }
 </script>

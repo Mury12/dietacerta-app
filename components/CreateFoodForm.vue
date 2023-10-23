@@ -5,45 +5,15 @@
         <label for="daily-name">Nome</label>
         <BFormInput type="text" name="name" v-model="form.name" />
         <label for="daily-carb">Carboidratos</label>
-        <BFormInput
-          type="text"
-          name="carb"
-          v-model="form.carb"
-          v-mask="decimalMask"
-          required
-        />
+        <BFormInput type="text" name="carb" v-model="form.carb" v-mask="decimalMask" required />
         <label for="daily-prot">Proteinas</label>
-        <BFormInput
-          type="text"
-          name="prot"
-          v-model="form.prot"
-          v-mask="decimalMask"
-          required
-        />
+        <BFormInput type="text" name="prot" v-model="form.prot" v-mask="decimalMask" required />
         <label for="daily-tfat">Gorduras</label>
-        <BFormInput
-          type="text"
-          name="tfat"
-          v-model="form.tfat"
-          v-mask="decimalMask"
-          required
-        />
+        <BFormInput type="text" name="tfat" v-model="form.tfat" v-mask="decimalMask" required />
         <label for="daily-sodium">Sódio</label>
-        <BFormInput
-          type="text"
-          name="sodium"
-          v-model="form.sodium"
-          v-mask="decimalMask"
-          required
-        />
+        <BFormInput type="text" name="sodium" v-model="form.sodium" v-mask="decimalMask" required />
         <label for="daily-fiber">Fibras</label>
-        <BFormInput
-          type="text"
-          name="fiber"
-          v-model="form.fiber"
-          v-mask="decimalMask"
-          required
-        />
+        <BFormInput type="text" name="fiber" v-model="form.fiber" v-mask="decimalMask" required />
       </BCol>
       <BCol cols="12" md="6">
         <div class="px-2">
@@ -58,29 +28,12 @@
           </ol>
         </div>
         <label for="daily-kcal">Calorias</label>
-        <BFormInput
-          type="text"
-          name="kcal"
-          v-model="kcal"
-          :mask="decimalMask"
-          required
-        />
+        <BFormInput type="text" name="kcal" v-model="kcal" :mask="decimalMask" required />
         <label for="daily-weight">Quantidade por porção</label>
-        <BFormInput
-          type="text"
-          placeholder="Quandidade de acordo com a unidade"
-          name="weight"
-          v-model="form.weight"
-          v-mask="decimalMask"
-          required
-        />
+        <BFormInput type="text" placeholder="Quandidade de acordo com a unidade" name="weight" v-model="form.weight"
+          v-mask="decimalMask" required />
         <label for="daily-weight">Unidade</label>
-        <BFormInput
-          placeholder="g, mg, fatia, colher"
-          type="text"
-          name="weight"
-          v-model="form.unit"
-        />
+        <BFormInput placeholder="g, mg, fatia, colher" type="text" name="weight" v-model="form.unit" />
         <div class="text-end w-100">
           <BButton type="submit" class="mt-3">Salvar</BButton>
         </div>
@@ -97,7 +50,7 @@ import { apiClient } from "~~/util/ApiClient";
 
 const foods = useComputedFoods();
 
-const form = ref<Food>({
+const form = ref<Partial<Food>>({
   name: "",
   calories: undefined,
   carb: undefined,
@@ -110,6 +63,8 @@ const form = ref<Food>({
 });
 
 const kcal = ref(0);
+const isLoading = useGlobalLoader();
+const loadingText = useLoadingText();
 
 watch(
   form,
@@ -124,9 +79,12 @@ watch(
 );
 
 async function send() {
-  const result = await apiClient.createFood(form.value);
+  isLoading.value = true;
+  loadingText.value = 'Enviando';
+  const result = await apiClient.createFood(<Food>form.value);
+  isLoading.value = false;
   console.log("create food", result);
-  foods.value.push({
+  foods.value.push(<Food>{
     ...form.value,
     id: result.id,
   });

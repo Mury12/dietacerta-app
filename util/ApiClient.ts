@@ -35,7 +35,7 @@ class ApiClient {
 
   setAuthorization(jwt: string) {
     this.cli.interceptors.request.use((config) => {
-      config.headers.Authorization = jwt;
+      if (config.headers) config.headers.Authorization = jwt;
       return config;
     });
   }
@@ -44,6 +44,19 @@ class ApiClient {
     const { data } = await this.cli.post<AuthResponse>(routes.auth, auth);
     this.setAuthorization(data.jwt);
     return data;
+  }
+
+  async verifyAuth(jwt: string) {
+    try {
+      await this.cli.get(routes.auth, {
+        headers: {
+          Authorization: jwt,
+        },
+      });
+      this.setAuthorization(jwt);
+    } catch {
+      return false;
+    }
   }
 
   async fetchUser(): Promise<User> {
@@ -69,7 +82,7 @@ class ApiClient {
     const { data } = await this.cli.get<GetAllDietsResponse>(
       routes.diet({ act: "1" })
     );
-    if (data && Array.isArray(data)) {
+    if (data.length && Array.isArray(data)) {
       return await this.fetchDietStats(data.at(-1).id);
     }
     throw new Error("No diet found");
@@ -111,6 +124,10 @@ class ApiClient {
   async createMeal(meal: Meal | Meal[]): Promise<DefaultPostResponse> {
     const { data } = await this.cli.post(routes.meals, [meal].flat());
     return data;
+  }
+
+  async removeMeal(mealId: number) {
+    await this.cli.delete(`${routes.meal()}/${mealId}`);
   }
 }
 

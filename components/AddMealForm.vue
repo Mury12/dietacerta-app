@@ -3,51 +3,27 @@
     <BCol cols="12" md="8" class="d-flex align-items-center border-end">
       <form class="form-control" @submit.prevent="send">
         <div class="food-list d-flex flex-wrap gap-lg">
-          <div
-            class="food pb-3 position-relative"
-            v-for="(food, idx) in selectedFoods"
-            :key="idx"
-          >
-            <div
-              class="remove-item position-absolute text-danger hover pointer"
-              @click="removeSelected(food.id)"
-            >
+          <div class="food pb-3 position-relative w-100" v-for="(food, idx) in selectedFoods()" :key="idx">
+            <div class="remove-item position-absolute text-danger hover pointer" @click="removeSelected(food.id)">
               <FaIcon icon="trash" />
             </div>
             {{ food.name }}<br />
-            <input
-              v-mask="decimalMask"
-              placeholder="10.00"
-              type="text"
-              required
-              min="0"
-              @input="setMealContent(idx, $event)"
-              class="rounded border"
-            />
+            <input v-mask="decimalMask" placeholder="10.00" type="text" required min="0"
+              @input="setMealContent(idx, $event)" class="rounded border" />
             {{ food.unit }}
             <span class="text-secondary">
-              (1 porção = {{ food.weight }} {{ food.unit }}) </span
-            ><br />
+              (1 porção = {{ food.weight }} {{ food.unit }}) </span><br />
             <div class="macro-wrap d-flex flex-wrap gap-sm mt-2">
               <MacroHint :macros="getFoodMacros(food.id)[1]" />
             </div>
           </div>
         </div>
-        <DynamicSelector
-          title="Selecione um alimento"
-          class="mt-3"
-          :options="foods"
-          :fields="fields"
-          :selected="selected"
-          :key="foods.length"
-          @select="setSelected"
-          @remove="removeSelected"
-          ><PlusButton>Adicionar Alimento</PlusButton></DynamicSelector
-        >
+        <DynamicSelector title="Selecione um alimento" class="mt-3" :options="foods" :fields="fields"
+          :selected="selected" :key="foods.length" @select="setSelected" @remove="removeSelected">
+          <PlusButton>Adicionar Alimento</PlusButton>
+        </DynamicSelector>
         <div class="w-100 text-end">
-          <BButton variant="success" type="submit" v-if="selected.length"
-            >Salvar</BButton
-          >
+          <BButton variant="success" type="submit" v-if="selected.length">Salvar</BButton>
         </div>
       </form>
     </BCol>
@@ -85,15 +61,18 @@ const diet = useComputedDiet();
 const foods = useComputedFoods();
 const meals = useComputedMeals();
 
+const isLoading = useGlobalLoader();
+const loadingText = useLoadingText();
+
 const selected = ref<number[]>([]);
 const mealContent = ref<Meal[]>([]);
 
-const selectedFoods = computed(() =>
-  selected.value.map((foodId) => {
+function selectedFoods() {
+  return selected.value.map((foodId) => {
     const foodIdx = foods.value.findIndex((food) => food.id === foodId);
     return foods.value[foodIdx];
   })
-);
+}
 
 const postAvailableDiet = computed(() => {
   const obj: Macro = {
@@ -104,18 +83,18 @@ const postAvailableDiet = computed(() => {
     sodium: 0,
     tfat: 0,
   };
-  const foodMacros: Macro = selectedFoods.value.reduce((acc, food) => {
+  const foodMacros: Macro = selectedFoods().reduce((acc, food) => {
     Object.keys(obj).forEach((key: keyof Macro) => {
       acc[key] += getFoodMacros(food.id)[0][key];
-      return acc;
     });
     return acc;
   }, obj);
+
   return getDietAfterMeal(diet.value.available, foodMacros);
 });
 
 const totalMacros = computed(() => {
-  const result: Record<string, MacroField> = selectedFoods.value.reduce(
+  const result: Record<string, MacroField> = selectedFoods().reduce(
     (acc, food) => {
       const [, macros] = getFoodMacros(food.id);
       macros.forEach((macro) => {
@@ -125,7 +104,7 @@ const totalMacros = computed(() => {
 
       return acc;
     },
-    {}
+    <Record<string, MacroField>>{}
   );
 
   return Object.values(result);
@@ -175,7 +154,7 @@ const fields: DynamicSelectorField<Food> = {
   ],
 };
 
-function setMealContent(idx: number, e) {
+function setMealContent(idx: number, e: any) {
   mealContent.value[idx].qtd = e.target.value;
 }
 
@@ -234,35 +213,40 @@ function getFoodMacros(id: number): [Macro, MacroField[]] {
   return [macrosObj, macroFields];
 }
 
-function removeSelected(foodId) {
+function removeSelected(foodId: number) {
   const idx = selected.value.indexOf(foodId);
   selected.value.splice(idx, 1);
   mealContent.value.splice(idx, 1);
 }
 
-function setSelected(foodId) {
+function setSelected(foodId: number) {
   selected.value.push(foodId);
   mealContent.value.push({
     foodId: foodId,
     qtd: 0,
   });
 }
+
 function cleanForm() {
-  selected.value.splice(0, -1);
-  mealContent.value.splice(0, -1);
-  selectedFoods.value.splice(0, -1);
+  selected.value.splice(0, selected.value.length);
+  mealContent.value.splice(0, mealContent.value.length);
 }
 
 async function send() {
-  const result = await apiClient.createMeal(mealContent.value);
-  console.log("Meal create", result);
-  cleanForm();
+  isLoading.value = true;
+  try {
+    const result = await apiClient.createMeal(mealContent.value);
+    console.log("Meal create", result);
+    cleanForm();
 
-  const updatedDiet = await apiClient.fetchDietStats(diet.value.id);
-  diet.value = updatedDiet;
+    const updatedDiet = await apiClient.fetchDietStats(diet.value.id);
+    diet.value = updatedDiet;
 
-  const updatedMeals = await apiClient.fetchTodayMeals();
-  meals.value = updatedMeals;
+    const updatedMeals = await apiClient.fetchTodayMeals();
+    meals.value = updatedMeals;
+  } finally {
+    isLoading.value = false;
+  }
 }
 
 async function fetchFoods() {
@@ -286,11 +270,12 @@ onMounted(() => {
 .form-control {
   border: none !important;
 }
+
 input[type="text"] {
   width: 8ch;
 }
+
 .remove-item {
-  left: -25px;
-  top: 50%;
+  right: 0;
 }
 </style>

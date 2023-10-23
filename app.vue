@@ -2,21 +2,41 @@
   <transition name="fade" mode="out-in">
     <NuxtLayout :name="layout" :key="layout">
       <NuxtPage />
+      <GlobalLoader />
     </NuxtLayout>
   </transition>
 </template>
 
 <script lang="ts" setup>
+import { User } from './types';
+import { apiClient } from './util/ApiClient';
+
 
 const user = useComputedUser();
 const layout = useLayout();
 const router = useRouter();
+const route = useRoute();
 
-if (!user.value)
-  router.push('/login');
+const LocalStorage = useLocalStorage();
 
-watch(user, (n) => {
-  if (!n) window.location.reload();
+async function checkAuth() {
+  try {
+    const jwt = LocalStorage.get<string>('jwt');
+    const savedUser = LocalStorage.get<User>('user');
+    if (jwt && savedUser) {
+      await apiClient.verifyAuth(jwt);
+      user.value = savedUser;
+      router.push('/');
+    } else if (route.name !== 'login') {
+      window.location.replace('/login');
+    }
+  } catch {
+    window.location.replace('/login');
+  }
+}
+
+onMounted(() => {
+  checkAuth();
 })
 
 </script>

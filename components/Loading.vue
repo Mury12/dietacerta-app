@@ -11,6 +11,7 @@
   font-size: 3em !important;
   color: var(--success);
 }
+
 .loading .svg-icon:nth-of-type(2) {
   animation-delay: 100ms;
 }
@@ -23,9 +24,11 @@
   0% {
     transform: translateY(0);
   }
+
   40% {
     transform: translateY(-10px);
   }
+
   75%,
   100% {
     transform: translateY(0);

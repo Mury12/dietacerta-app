@@ -5,6 +5,7 @@ export interface Macro {
   calories: number;
   fiber: number;
   sodium: number;
+  [key: string]: any;
 }
 
 export interface MacroField {

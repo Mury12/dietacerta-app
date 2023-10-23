@@ -14,7 +14,7 @@ export interface MealStats {
 export interface MealWithFoodStats {
   stats: MealStats;
   food: Food;
-  id?: number;
+  id: number;
 }
 
 export type GetMealsResponse = MealWithFoodStats[];
