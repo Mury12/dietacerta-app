@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from 'axios';
 import {
   GetAllDietsResponse,
   GetDietResponse,
@@ -11,16 +11,17 @@ import {
   Diet,
   Food,
   Meal,
-} from "~~/types";
-import { DefaultPostResponse } from "~~/types/Generic";
-import { objectToQueryFilters } from "./object-to-query-params";
+  SignupUser,
+} from '~~/types';
+import { DefaultPostResponse } from '~~/types/Generic';
+import { objectToQueryFilters } from './object-to-query-params';
 
 const routes = {
-  auth: "/user/login",
-  user: "/user",
-  meal: (today?: boolean) => `/diet/meal${today ? "?today=true" : ""}`,
-  meals: "/diet/bulk-meal",
-  foods: "/food",
+  auth: '/user/login',
+  user: '/user',
+  meal: (today?: boolean) => `/diet/meal${today ? '?today=true' : ''}`,
+  meals: '/diet/bulk-meal',
+  foods: '/food',
   diet: (filters?: DietFilters) => `/diet${objectToQueryFilters(filters)}`,
   dietStats: (dietId: number) => `/diet/stat/${dietId}`,
 };
@@ -28,7 +29,7 @@ const routes = {
 class ApiClient {
   constructor(
     private readonly cli = axios.create({
-      baseURL: "http://192.168.123.101:7000/ws/v2",
+      baseURL: 'http://192.168.123.101:7000/ws/v2',
       withCredentials: false,
     })
   ) {}
@@ -64,7 +65,7 @@ class ApiClient {
     return data;
   }
 
-  async createUser(user: User): Promise<DefaultPostResponse> {
+  async createUser(user: SignupUser): Promise<DefaultPostResponse> {
     const { data } = await this.cli.post<DefaultPostResponse>(
       routes.user,
       user
@@ -80,12 +81,13 @@ class ApiClient {
 
   async fetchActiveDiet(): Promise<GetDietResponse> {
     const { data } = await this.cli.get<GetAllDietsResponse>(
-      routes.diet({ act: "1" })
+      routes.diet({ act: '1' })
     );
-    if (data.length && Array.isArray(data)) {
-      return await this.fetchDietStats(data.at(-1).id);
+    const dietId = data?.at(-1)?.id;
+    if (dietId) {
+      return await this.fetchDietStats(dietId);
     }
-    throw new Error("No diet found");
+    throw new Error('No diet found');
   }
 
   async createDiet(diet: Partial<Diet>): Promise<DefaultPostResponse> {
@@ -98,7 +100,7 @@ class ApiClient {
 
   async fetchAllDiets(): Promise<GetAllDietsResponse> {
     const { data } = await this.cli.get<GetAllDietsResponse>(
-      routes.diet({ act: "1" })
+      routes.diet({ act: '1' })
     );
     return data;
   }

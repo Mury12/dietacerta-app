@@ -59,16 +59,6 @@ function setSelected(idx: number) {
   selected.value = idx;
 }
 
-async function login(
-  auth: Auth = {
-    email: "mury_gh@hotmail.com",
-    password: "jnd2l3h23",
-  }
-) {
-  const { jwt, name } = await apiClient.authenticate(auth);
-  user.value.email = auth.email;
-  user.value.name = name;
-}
 
 async function fetchDiet() {
   const result = await apiClient.fetchActiveDiet();
@@ -82,10 +72,8 @@ async function fetchMeals() {
 
 onMounted(() => {
   nextTick(() => {
-    login().then(() => {
       fetchDiet();
       fetchMeals();
-    });
   });
 });
 </script>

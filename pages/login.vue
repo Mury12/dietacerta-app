@@ -28,7 +28,7 @@
     </BRow>
 </template>
 <script lang="ts" setup>
-import { Auth, User } from '~~/types';
+import { Auth, AuthResponse, SignupUser, User } from '~~/types';
 import { apiClient } from '~~/util/ApiClient';
 
 const router = useRouter();
@@ -45,7 +45,7 @@ const authForm = ref<Auth>({
     password: ''
 })
 
-const signupForm = ref<User>({
+const signupForm = ref<SignupUser>({
     email: '',
     name: '',
     password: '',
@@ -57,14 +57,14 @@ async function send() {
         errorMsg.value = '';
         const { name, jwt } = await apiClient.authenticate(authForm.value);
         user.value = {
-            name,
+            name: name || 'Anonimo',
             email: authForm.value.email
         }
         LocalStorage.set('user', user.value);
         LocalStorage.set('jwt', jwt);
 
         router.push('/');
-    } catch (error) {
+    } catch (error: any) {
         errorMsg.value = error.message;
     } finally {
         isLoading.value = false;
@@ -75,14 +75,14 @@ async function signup() {
     try {
         errorMsg.value = '';
 
-        const data: User = {
+        const data: SignupUser = {
             ...authForm.value,
             name: signupForm.value.name
         }
         await apiClient.createUser(data);
         send();
 
-    } catch (error) {
+    } catch (error: any) {
         errorMsg.value = error.message;
         console.error(error)
     }

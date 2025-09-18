@@ -35,7 +35,7 @@ export const useComputedFoods = () =>
 export const useComputedMeals = () =>
   useState("meals", (): GetMealsResponse => mealsMock);
 
-export const useComputedUser = () => useState("user", (): User => undefined);
+export const useComputedUser = () => useState("user", (): User|undefined => undefined);
 
 export const useMacroDistribution = () =>
   useState(
