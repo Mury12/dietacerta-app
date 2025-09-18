@@ -15,6 +15,7 @@ import {
 } from '~~/types';
 import { DefaultPostResponse } from '~~/types/Generic';
 import { objectToQueryFilters } from './object-to-query-params';
+import { LocalStorage } from './LocalStorage';
 
 const routes = {
   auth: '/user/login',

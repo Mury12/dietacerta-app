@@ -14,7 +14,7 @@
 import { defineComponent } from "vue";
 export default defineComponent({
   setup() {
-    const username = "André Mury";
+    const username = "";
     return { username, ...useDisclosure() };
   },
 });

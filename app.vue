@@ -1,7 +1,7 @@
 <template>
   <transition name="fade" mode="out-in">
     <NuxtLayout :name="layout" :key="layout">
-      <NuxtPage />
+      <NuxtPage v-if="authCompleted" />
       <GlobalLoader />
     </NuxtLayout>
   </transition>
@@ -11,18 +11,21 @@
 import { User } from './types';
 import { apiClient } from './util/ApiClient';
 
-
 const user = useComputedUser();
 const layout = useLayout();
 const router = useRouter();
 const route = useRoute();
-
+const loading = useGlobalLoader();
 const LocalStorage = useLocalStorage();
+
+const authCompleted = ref(false);
 
 async function checkAuth() {
   try {
     const jwt = LocalStorage.get<string>('jwt');
+    console.log('jwt', jwt);
     const savedUser = LocalStorage.get<User>('user');
+    console.log('user', savedUser);
     if (jwt && savedUser) {
       await apiClient.verifyAuth(jwt);
       user.value = savedUser;
@@ -32,10 +35,12 @@ async function checkAuth() {
     }
   } catch {
     window.location.replace('/login');
+  }finally {
+    authCompleted.value = true
   }
 }
 
-onMounted(() => {
+onBeforeMount(() => {
   checkAuth();
 })
 
